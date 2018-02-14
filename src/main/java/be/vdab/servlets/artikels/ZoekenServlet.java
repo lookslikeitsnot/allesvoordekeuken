@@ -9,14 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import be.vdab.repositories.ArtikelRepository;
+import be.vdab.services.ArtikelService;
 import be.vdab.util.StringUtils;
 
 @WebServlet("/artikels/zoeken.htm")
 public class ZoekenServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private static final String VIEW = "/WEB-INF/JSP/artikels/zoeken.jsp";
-	private final transient ArtikelRepository artikelRepository = new ArtikelRepository();
+	private final transient ArtikelService artikelService = new ArtikelService();
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -24,7 +24,7 @@ public class ZoekenServlet extends HttpServlet {
 		if (request.getQueryString() != null) {
 			String id = request.getParameter("id");
 			if (StringUtils.isLong(id)) {
-				artikelRepository.read(Long.parseLong(id)).ifPresent(artikel -> request.setAttribute("artikel", artikel));
+				artikelService.read(Long.parseLong(id)).ifPresent(artikel -> request.setAttribute("artikel", artikel));
 			} else {
 				request.setAttribute("fouten", Collections.singletonMap("id", "tik een getal"));
 				// singletonMap maakt intern een Map met één entry (key=id,
