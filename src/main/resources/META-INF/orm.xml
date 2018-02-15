@@ -11,4 +11,10 @@ where a.naam like :naam
 order by a.naam, a.id
 </query>
 	</named-query>
+	<named-query name='Artikel.prijsverhoging'>
+		<query>
+update Artikel a
+set a.verkoopprijs = a.verkoopprijs * :factor
+</query>
+	</named-query>
 </entity-mappings>

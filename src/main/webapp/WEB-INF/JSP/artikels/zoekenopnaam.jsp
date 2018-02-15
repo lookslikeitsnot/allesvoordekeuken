@@ -17,7 +17,7 @@ td:first-child, td:last-child {
 	<h1>Artikel met naam</h1>
 	<form>
 		<label>Naam:<span>${fouten.naam}</span> <input name='naam'
-			value='${param.naam}' type='text' required autofocus></label> <input
+			value='${param.naam}' type='search' required autofocus></label> <input
 			type="submit" value="Zoeken" />
 	</form>
 	<c:if test="${not empty param and empty fouten and empty artikels}">
