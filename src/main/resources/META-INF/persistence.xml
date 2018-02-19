@@ -10,6 +10,7 @@ http://www.oracle.com/webfolder/technetwork/jsc/xml/ns/persistence/persistence_2
 		<class>be.vdab.entities.Artikel</class>
 		<class>be.vdab.entities.Food</class>
 		<class>be.vdab.entities.NonFood</class>
+		<class>be.vdab.valueobjects.Korting</class>
 		<properties>
 			<property name='hibernate.show_sql' value='true' />
 			<property name='hibernate.format_sql' value='true' />
