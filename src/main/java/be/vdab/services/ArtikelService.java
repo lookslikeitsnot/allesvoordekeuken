@@ -7,16 +7,23 @@ import java.util.Optional;
 import javax.persistence.PersistenceException;
 
 import be.vdab.entities.Artikel;
+import be.vdab.exceptions.ArtikelBestaatAlException;
 import be.vdab.repositories.ArtikelRepository;
 
 public class ArtikelService extends AbstractService {
 	private final ArtikelRepository artikelRepository = new ArtikelRepository();
+//	private final ArtikelgroepRepository artikelgroepRepository 
+//		= new ArtikelgroepRepository();
+	
 
 	public Optional<Artikel> read(long id) {
 		return artikelRepository.read(id);
 	}
 
 	public void create(Artikel artikel) {
+		if(artikelRepository.findAll().contains(artikel)) {
+			throw new ArtikelBestaatAlException();
+		}
 		beginTransaction();
 		try {
 			artikelRepository.create(artikel);
@@ -28,7 +35,7 @@ public class ArtikelService extends AbstractService {
 	}
 
 	public List<Artikel> findByNaam(String naam, int vanafRij, int aantalRijen) {
-		return artikelRepository.findByNaam(naam, vanafRij, aantalRijen);
+		return artikelRepository.findByNaam(naam, vanafRij, aantalRijen).get();
 	}
 
 	public void prijsvehoging(BigDecimal percentage) {
@@ -44,5 +51,8 @@ public class ArtikelService extends AbstractService {
 	}
 	public List<Artikel> findAll(){
 		return artikelRepository.findAll();
+	}
+	public List<Artikel> findAllMetGroep(){
+		return artikelRepository.findAllMetGroep();
 	}
 }

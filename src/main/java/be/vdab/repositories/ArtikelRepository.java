@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.NoResultException;
+
 import be.vdab.entities.Artikel;
 
 public class ArtikelRepository extends AbstractRepository {
@@ -15,10 +17,17 @@ public class ArtikelRepository extends AbstractRepository {
 		getEntityManager().persist(artikel);
 	}
 
-	public List<Artikel> findByNaam(String naam, int vanafRij, int aantalRijen) {
-		return getEntityManager().createNamedQuery("Artikel.findByNaam", Artikel.class)
-				.setParameter("naam", '%' + naam + '%').setFirstResult(vanafRij).setMaxResults(aantalRijen)
-				.getResultList();
+	public Optional<List<Artikel>> findByNaam(String naam, int vanafRij, int aantalRijen) {
+		try {
+			return Optional
+					.of(getEntityManager()
+							.createNamedQuery("Artikel.findByNaam", Artikel.class)
+							.setParameter("naam", '%' + naam + '%')
+							.setFirstResult(vanafRij).setMaxResults(aantalRijen)
+							.getResultList());
+		} catch (NoResultException ex) {
+			return Optional.empty();
+		}
 	}
 
 	public void prijsverhoging(BigDecimal factor) {
@@ -27,5 +36,12 @@ public class ArtikelRepository extends AbstractRepository {
 	
 	public List<Artikel> findAll(){
 		return getEntityManager().createNamedQuery("Artikel.findAll", Artikel.class).getResultList();
+	}
+	
+	public List<Artikel> findAllMetGroep(){
+		return getEntityManager()
+					.createNamedQuery("Artikel.findAll", Artikel.class)
+					.setHint("javax.persistence.loadgraph", getEntityManager().createEntityGraph(Artikel.MET_ARTIKELGROEP))
+					.getResultList();
 	}
 }
